@@ -19,6 +19,21 @@ const routes = [
     name:'orders',
     component: Orders
   },
+  // {
+  //   path: '/login',
+  //   name: 'login',
+  //   component: LoginView
+  // },
+  // {
+  //   path: '/registration',
+  //   name:'registration',
+  //   component: RegistrationView
+  // },
+  // {
+  //   path: '/logout',
+  //   name:'logout',
+  //   component: Catalog
+  // },
 ]
 
 const router = createRouter({

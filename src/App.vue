@@ -4,7 +4,10 @@
     <router-link to="/cart">Корзина</router-link>
     <router-link to="/orders">Мои заказы</router-link>
   </nav>
-  <router-view/>
+  <router-view :cart="cart" @update:cart="cart = $event" />
+  <router-view v-slot="{ ShoppingCart }">
+    <component :is="ShoppingCart" v-if="ShoppingCart" />
+  </router-view>
 </template>
 
 <style>
@@ -43,5 +46,12 @@ nav a.router-link-exact-active{
 }
 </style>
 
-<script setup>
+<script>
+export default {
+  data() {
+    return {
+      cart: {},
+    };
+  },
+};
 </script>
