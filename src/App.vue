@@ -1,6 +1,8 @@
 <template>
   <nav>
     <router-link to="/">Каталог</router-link>
+    <router-link to="/cart">Корзина</router-link>
+    <router-link to="/orders">Мои заказы</router-link>
   </nav>
   <router-view/>
 </template>
