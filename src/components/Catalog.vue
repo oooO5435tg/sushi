@@ -10,8 +10,11 @@ export default {
 
   },
   mounted() {
+    if (localStorage.token !== undefined && localStorage.token !== null) {
+      store.state.user_token = localStorage.token;
+    }
     this.$store.commit('getProducts');
-  }
+  },
 }
 </script>
 

@@ -15,11 +15,11 @@ export default {
    <form @submit.prevent="store.commit('registration')">
      <div class="form-group">
        <label for="name">Name</label>
-       <input id="name" type="text" v-model="store.state.fio" required autofocus class="form-control">
+       <input id="name" type="text" v-model="store.state.fio" required class="form-control">
      </div>
 
      <div class="form-group">
-       <label for="email">E-Mail Address</label>
+       <label for="email">E-mail Address</label>
        <input id="email" type="email" v-model="store.state.email" required class="form-control">
      </div>
 
@@ -32,6 +32,7 @@ export default {
      </div>
    </form>
  </div>
+  <router-link to="/">Вернуться на главную</router-link>
 </template>
 
 <style scoped>

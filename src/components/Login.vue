@@ -20,6 +20,7 @@ export default {
      <button type="submit" class="btn btn-primary">Login</button>
    </form>
  </div>
+ <router-link to="/">Вернуться на главную</router-link>
 </template>
 
 <style scoped>

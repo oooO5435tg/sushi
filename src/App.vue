@@ -1,12 +1,13 @@
 <template>
   <nav>
     <router-link to="/">Каталог</router-link>
-    <router-link to="/cart">Корзина</router-link>
-    <router-link to="/orders">Мои заказы</router-link>
-    <router-link to="/registration">Регистрация</router-link>
-    <router-link to="/login">Вход</router-link>
-    <p v-show="isLoggedIn"><router-link to="/">Выход</router-link></p>
+    <router-link to="/cart" v-show="store.state.user_token !== null">Корзина</router-link>
+    <router-link to="/orders" v-show="store.state.user_token !== null">Мои заказы</router-link>
+    <router-link to="/" v-show="store.state.user_token !== null" @click="store.commit('logout')">Выход</router-link>
+    <router-link to="/registration" v-show="store.state.user_token === null">Регистрация</router-link>
+    <router-link to="/login" v-show="store.state.user_token === null">Вход</router-link>
   </nav>
+
   <router-view :cart="cart" @update:cart="cart = $event" />
   <router-view v-slot="{ ShoppingCart }">
     <component :is="ShoppingCart" v-if="ShoppingCart" />
@@ -53,13 +54,9 @@ nav a.router-link-exact-active{
 import store from "@/store";
 export default {
   computed:{
-    isLoggedIn() {
-      console.log("isLoggedIn called");
-      return this.$store.state.user_token !== null;
-    },
     store(){
       return store
-    }
+    },
   },
   methods: {
     logout() {

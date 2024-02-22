@@ -1,61 +1,34 @@
 <template>
-  <div v-if="cartItems.length > 0">
-    <h1>Корзина</h1>
+  <h1>Корзина</h1>
+  <div v-if="store.state.cartList.length > 0">
     <div id="products">
-      <div class="product_item" v-for="item in cartItems" :key="item.id">
+      <div class="product_item" v-for="item in store.state.cartList" :key="item.id">
         <h2>{{ item.name }}</h2>
         <p>{{ item.price }} руб.</p>
-        <button class="quantity_btn" @click="decreaseQuantity(item)">-</button>
-        <span class="quantity">{{ item.quantity }}</span>
-        <button class="quantity_btn" @click="increaseQuantity(item)">+</button>
-        <button class="remove_btn" @click="removeFromCart(item)">Удалить</button>
+        <button class="quantity_btn">-</button>
+        <span class="quantity">Кол-во: {{ item.quantity }}</span>
+        <button class="quantity_btn">+</button>
+        <button class="remove_btn">Удалить из корзины</button>
       </div>
     </div>
     <button class="order_btn" @click="clearCart">Оформить заказ</button>
   </div>
   <div v-else>
-    <h1>Корзина пуста</h1>
+    <h3>Ваша корзина пуста</h3>
   </div>
+  <router-link to="/">Вернуться на главную</router-link>
 </template>
 
 <script>
+import store from "@/store";
+
 export default {
-  props: {
-    cart: {
-      type: Object,
-      required: true,
-    },
-  },
   computed: {
-    cartItems() {
-      return Object.values(this.cart).map(item => ({...item, quantity: 1}));
-    },
+    store() {
+      return store
+    }
   },
-  methods: {
-    increaseQuantity(item) {
-      this.$emit('update:cart', {
-        ...this.cart,
-        [item.id]: {...item, quantity: (this.cart[item.id].quantity || 0) + 1},
-      });
-    },
-    decreaseQuantity(item) {
-      if (this.cart[item.id].quantity > 1) {
-        this.$emit('update:cart', {
-          ...this.cart,
-          [item.id]: {...item, quantity: (this.cart[item.id].quantity || 0) - 1},
-        });
-      }
-    },
-    removeFromCart(item) {
-      const newCart = {...this.cart};
-      delete newCart[item.id];
-      this.$emit('update:cart', newCart);
-    },
-    clearCart() {
-      this.$emit('update:cart', {});
-    },
-  },
-};
+}
 </script>
 
 <style>
