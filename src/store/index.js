@@ -19,14 +19,13 @@ import axios from "axios";
 
 export default createStore({
   state: {
-    products: [],
-    cartList: [],
-    orders: [],
     fio: '',
     email: '',
     password: '',
     user_token: null,
-    user_auth: false,
+    products: [],
+    cartList: [],
+    orderList: [],
   },
   getters: {
 
@@ -38,24 +37,6 @@ export default createStore({
           .catch(error =>{console.log(error)})
       state.products = data;
     },
-    async login(state){
-      const data = await axios.post('https://jurapro.bhuser.ru/api-shop/login', {
-        email: state.email,
-        password: state.password
-      })
-      .then(function(response){
-        state.user_token = response.data.data.user_token;
-        localStorage.token = state.user_token;
-      })
-      .catch(error =>{console.log(error)})
-
-      console.log(data);
-      console.log(state.user_token);
-
-      if(localStorage.token !== undefined && localStorage.token !== null){
-        window.location.href = "/";
-      }
-    },
     async registration(state){
       const data = await axios.post('https://jurapro.bhuser.ru/api-shop/signup', {
         fio: state.fio,
@@ -63,26 +44,47 @@ export default createStore({
         password: state.password
       })
       .then(function(response){
-        console.log(response);
         state.user_token = response.data.data.user_token;
         localStorage.token = state.user_token;
         alert('Регистрация прошла успешно');
-        if(localStorage.token !== undefined && localStorage.token !== null){
+        if(localStorage.token !== null && localStorage.token !== undefined){
           window.location.href = "/login";
         }
       })
       .catch(error =>{console.log(error)
         alert('Регистрация провалена. Попробуйте еще раз');
       })
-
-      console.log(data);
-      console.log(state.user_token);
-
+    },
+    async login(state){
+      const data = await axios.post('https://jurapro.bhuser.ru/api-shop/login', {
+        email: state.email,
+        password: state.password
+      })
+          .then(function(response){
+            state.user_token = response.data.data.user_token;
+            localStorage.token = state.user_token;
+            alert('Авторизация прошла успешно');
+          })
+          .catch(error =>{console.log(error)
+            alert('Авторизация провалена. Попробуйте еще раз');
+          })
+      if(localStorage.token !== undefined && localStorage.token !== null){
+        window.location.href = "/";
+      }
     },
     logout(state){
       state.user_token = null;
       localStorage.clear();
-    }
+    },
+    addProductToCart(state, product) {
+      axios.post(`https://jurapro.bhuser.ru/api-shop/cart/${product.id}`)
+          .then(response => {
+            state.cartList.push(response.data.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
   },
   actions: {
 

@@ -7,7 +7,10 @@ export default {
     }
   },
   methods:{
-
+    addToCart(product) {
+      console.log(`Adding product ${product.id} to cart`);
+      this.$store.commit('addProductToCart', product.id);
+    },
   },
   mounted() {
     if (localStorage.token !== undefined && localStorage.token !== null) {
