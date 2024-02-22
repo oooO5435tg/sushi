@@ -1,54 +1,25 @@
 <script>
-// import store from "@/store";
-// export default {
-//   computed: {
-//     store() {
-//       return store
-//     }
-//   },
-//   methods:{
-//
-//   },
-//   mounted() {
-//     this.$store.commit('getProducts');
-//   }
-// }
-import axios from "axios";
+import store from "@/store";
 export default {
-  data() {
-    return {
-      catalog: [],
-      cart: {},
-    };
-  },
-  async mounted() {
-    try{
-      const response = await axios.get("https://jurapro.bhuser.ru/api-shop/products");
-      this.catalog = response.data.data;
-      console.log(this.catalog);
-    }
-    catch (error) {
-      console.error("Error fetching products:", error);
+  computed: {
+    store() {
+      return store
     }
   },
-  methods: {
-    addToCart(item) {
-      if (this.cart[item.id]) {
-        this.cart[item.id].quantity++;
-      } else {
-        this.cart[item.id] = { ...item, quantity: 1 };
-      }
-      this.$emit('update:cart', this.cart);
-    },
+  methods:{
+
+  },
+  mounted() {
+    this.$store.commit('getProducts');
   }
-};
+}
 </script>
 
 <template>
   <h1>Каталог товаров</h1>
   <div id="catalog">
     <div class="products">
-      <div class="product_item" v-for="item in this.catalog">
+      <div class="product_item" v-for="item in this.store.state.products">
         <h2>{{ item.name }}</h2>
         <p>{{ item.description }}</p>
         <p>{{ item.price }} руб.</p>
@@ -71,7 +42,7 @@ export default {
 }
 .product_item{
   width: 220px;
-  background-color: #f2f2f2;
+  background-color: #e1e1e1;
   border-radius: 5px;
   padding: 20px;
   text-align: center;
@@ -90,7 +61,7 @@ export default {
 }
 .add_btn{
   width: 200px;
-  background-color: #42b983;
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 5px;
@@ -98,6 +69,6 @@ export default {
   cursor: pointer;
 }
 .product_item button:hover{
-  background-color: #37a073;
+  background-color: #3e8e41;
 }
 </style>

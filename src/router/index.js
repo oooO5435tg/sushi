@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Catalog from '../components/Catalog.vue'
 import ShoppingCart from '../components/ShoppingCart.vue'
 import Orders from '../components/Orders.vue'
+import Login from '../components/Login.vue'
+import Register from '../components/Register.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'catalog',
+    name: 'products',
     component: Catalog
   },
   {
@@ -19,21 +21,16 @@ const routes = [
     name:'orders',
     component: Orders
   },
-  // {
-  //   path: '/login',
-  //   name: 'login',
-  //   component: LoginView
-  // },
-  // {
-  //   path: '/registration',
-  //   name:'registration',
-  //   component: RegistrationView
-  // },
-  // {
-  //   path: '/logout',
-  //   name:'logout',
-  //   component: Catalog
-  // },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/registration',
+    name:'registration',
+    component: Register
+  }
 ]
 
 const router = createRouter({

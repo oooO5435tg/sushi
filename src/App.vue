@@ -3,6 +3,9 @@
     <router-link to="/">Каталог</router-link>
     <router-link to="/cart">Корзина</router-link>
     <router-link to="/orders">Мои заказы</router-link>
+    <router-link to="/registration">Регистрация</router-link>
+    <router-link to="/login">Вход</router-link>
+    <p v-show="isLoggedIn"><router-link to="/">Выход</router-link></p>
   </nav>
   <router-view :cart="cart" @update:cart="cart = $event" />
   <router-view v-slot="{ ShoppingCart }">
@@ -47,11 +50,21 @@ nav a.router-link-exact-active{
 </style>
 
 <script>
+import store from "@/store";
 export default {
-  data() {
-    return {
-      cart: {},
-    };
+  computed:{
+    isLoggedIn() {
+      console.log("isLoggedIn called");
+      return this.$store.state.user_token !== null;
+    },
+    store(){
+      return store
+    }
   },
-};
+  methods: {
+    logout() {
+      store.commit("logout");
+    },
+  },
+}
 </script>
