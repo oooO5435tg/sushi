@@ -57,10 +57,11 @@ export default {
 </script>
 
 <style>
-.products {
+#products {
   display: grid;
   grid-template-columns: repeat(5, 200px);
   gap: 90px;
+  margin-left: 100px;
 }
 
 .product_item {
@@ -85,5 +86,47 @@ export default {
 
 .product_item p {
   margin: 5px 0;
+}
+
+.quantity_btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 0 10px;
+}
+
+.quantity_btn:hover {
+  color: #f00;
+}
+
+.remove_btn {
+  background-color: #f00;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.remove_btn:hover {
+  background-color: #800;
+}
+
+.order_btn {
+  background-color: #48b632;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.order_btn:hover {
+  background-color: #369620;
 }
 </style>
