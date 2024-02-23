@@ -1,19 +1,3 @@
-// import { createStore } from 'vuex'
-
-// export default createStore({
-//   state: {
-//   },
-//   getters: {
-//   },
-//   mutations: {
-//   },
-//   actions: {
-//   },
-//   modules: {
-//   }
-// })
-
-
 import { createStore } from 'vuex'
 import axios from "axios";
 
@@ -74,11 +58,6 @@ export default createStore({
         window.location.href = "/";
       }
     },
-    // logout(state){
-    //   state.user_token = null;
-    //   // localStorage.clear();
-    //   // localStorage.removeItem('userOrders');
-    // },
     async logout(state) {
       const token = state.user_token;
       const response = await axios.get(`https://jurapro.bhuser.ru/api-shop/logout`, {
@@ -95,22 +74,7 @@ export default createStore({
           .catch(error => {console.log(error);
           });
       state.user_token = null;
-      localStorage.clear();
     },
-    // logout(state) {
-    //   state.user_token = null;
-    //   localStorage.removeItem('user_token');
-    // },
-
-    // addProductToCart(state, product) {
-    //   axios.post(`https://jurapro.bhuser.ru/api-shop/cart/${product.id}`)
-    //       .then(response => {
-    //         state.cartList.push(response.data.data);
-    //       })
-    //       .catch(error => {
-    //         console.log(error);
-    //       });
-    // },
     addProductToCart(state, product) {
       const token = state.user_token;
       if (token) {
@@ -139,7 +103,12 @@ export default createStore({
           }
         })
             .then(response => {
-              console.log({ data: response.data.data });
+              if(state.cartList.length === 0){
+                console.log("error", { code: "402", message: "Cart is empty" });
+              }
+              else{
+                console.log({ data: response.data.data });
+              }
               state.cartList = response.data.data;
             })
             .catch(error => {console.log(error);
@@ -198,7 +167,9 @@ export default createStore({
             state.orderList.unshift(response.data.data);
             localStorage.setItem('userOrders', JSON.stringify(state.orderList));
             state.cartList = [];
-            console.log({ data: { order_id: response.data.data.id, message: 'Order is processed' } });
+            // Store the products in the order
+            response.data.data.products = state.cartList.map(item => item.product_id);
+            console.log({ data: { order_id: response.data.data.order_id, message: 'Order is processed' } });
           }
         } catch (error) {
           if (error.response && error.response.status === 422) {
@@ -220,7 +191,7 @@ export default createStore({
       const storedOrders = localStorage.getItem('userOrders');
       if (storedOrders) {
         commit('setOrders', JSON.parse(storedOrders));
-        console.log({ data: { orders: JSON.parse(storedOrders) } });
+        console.log("data", JSON.parse(storedOrders));
       }
     },
   },

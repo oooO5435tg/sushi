@@ -20,6 +20,23 @@ export default {
       }
       return order.products.reduce((total, product) => total + product.price * product.quantity, 0);
     },
+    async getProductName(productId) {
+      const token = store.state.user_token;
+      if (token) {
+        try {
+          const response = await axios.get(`https://jurapro.bhuser.ru/api-shop/products/${productId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          return response.data.data.name;
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        console.log('User is not authenticated');
+      }
+    },
   },
 }
 </script>
@@ -32,8 +49,8 @@ export default {
         <h2>Заказ #{{ order.id }}</h2>
         <p>Товары:</p>
         <ul>
-          <li v-for="product in order.products" :key="product.id">
-            {{ product.name }} (цена: {{ product.price }} руб., количество: {{ product.pivot.quantity }})
+          <li v-for="productId in order.products" :key="productId">
+            {{ getProductName(productId) }}
           </li>
         </ul>
         <p>Итого: {{ getOrderTotalPrice(order) }} руб.</p>
