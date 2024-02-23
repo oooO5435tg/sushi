@@ -25,6 +25,7 @@ export default createStore({
     user_token: null,
     products: [],
     cartList: [],
+    cartItems: [],
     orderList: [],
   },
   getters: {
@@ -76,14 +77,32 @@ export default createStore({
       state.user_token = null;
       localStorage.clear();
     },
+    // addProductToCart(state, product) {
+    //   axios.post(`https://jurapro.bhuser.ru/api-shop/cart/${product.id}`)
+    //       .then(response => {
+    //         state.cartList.push(response.data.data);
+    //       })
+    //       .catch(error => {
+    //         console.log(error);
+    //       });
+    // },
     addProductToCart(state, product) {
-      axios.post(`https://jurapro.bhuser.ru/api-shop/cart/${product.id}`)
-          .then(response => {
-            state.cartList.push(response.data.data);
-          })
-          .catch(error => {
-            console.log(error);
-          });
+      const token = state.user_token;
+      if (token) {
+        axios.post(`https://jurapro.bhuser.ru/api-shop/cart/${product.id}`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+            .then(response => {
+              state.cartList.push(response.data.data);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+      } else {
+        console.log('Пользователь не авторизован');
+      }
     },
   },
   actions: {
