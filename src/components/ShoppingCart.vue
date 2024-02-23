@@ -11,7 +11,9 @@
         <button class="remove_btn" @click="removeProductFromCart(item.id)">Удалить из корзины</button>
       </div>
     </div>
-    <button class="order_btn" @click="clearCart">Оформить заказ</button>
+    <button class="order_btn" @click="placeOrder" :disabled="store.state.cartList.length === 0">
+      Оформить заказ
+    </button>
   </div>
   <div v-else>
     <h3>Ваша корзина пуста</h3>
@@ -34,7 +36,10 @@ export default {
   methods:{
     removeProductFromCart(productId) {
       this.$store.commit('removeProductFromCart', productId);
-    }
+    },
+    placeOrder() {
+      this.$store.commit('placeOrder');
+    },
   }
 }
 </script>

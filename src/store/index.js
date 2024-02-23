@@ -25,7 +25,6 @@ export default createStore({
     user_token: null,
     products: [],
     cartList: [],
-    cartItems: [],
     orderList: [],
   },
   getters: {
@@ -75,7 +74,8 @@ export default createStore({
     },
     logout(state){
       state.user_token = null;
-      localStorage.clear();
+      // localStorage.clear();
+      // localStorage.removeItem('userOrders');
     },
     // logout(state) {
     //   state.user_token = null;
@@ -152,9 +152,46 @@ export default createStore({
         console.log('Пользователь не авторизован');
       }
     },
+    async placeOrder(state) {
+      const token = state.user_token;
+      if (token) {
+        try {
+          const response = await axios.post(
+              'https://jurapro.bhuser.ru/api-shop/order',
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              }
+          );
+          if (response.status === 201) {
+            state.orderList.unshift(response.data.data);
+            localStorage.setItem('userOrders', JSON.stringify(state.orderList));
+            state.cartList = []; // Clear the cart after a successful order
+          }
+        } catch (error) {
+          if (error.response && error.response.status === 422) {
+            console.log('Cart is empty');
+          } else {
+            console.log(error);
+          }
+        }
+      } else {
+        console.log('User is not authenticated');
+      }
+    },
+    setOrders(state, orders) {
+      state.orderList = orders;
+    },
   },
   actions: {
-
+    async loadOrders({ commit }) {
+      const storedOrders = localStorage.getItem('userOrders');
+      if (storedOrders) {
+        commit('setOrders', JSON.parse(storedOrders));
+      }
+    },
   },
   modules: {
 
