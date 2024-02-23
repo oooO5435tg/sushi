@@ -77,6 +77,11 @@ export default createStore({
       state.user_token = null;
       localStorage.clear();
     },
+    // logout(state) {
+    //   state.user_token = null;
+    //   localStorage.removeItem('user_token');
+    // },
+
     // addProductToCart(state, product) {
     //   axios.post(`https://jurapro.bhuser.ru/api-shop/cart/${product.id}`)
     //       .then(response => {
@@ -99,6 +104,49 @@ export default createStore({
             })
             .catch(error => {
               console.log(error);
+            });
+      } else {
+        console.log('Пользователь не авторизован');
+      }
+    },
+    getCart(state) {
+      const token = state.user_token;
+      if (token) {
+        axios.get(`https://jurapro.bhuser.ru/api-shop/cart`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+            .then(response => {
+              state.cartList = response.data.data;
+            })
+            .catch(error => {
+              console.log(error);
+            });
+      } else {
+        console.log('Пользователь не авторизован');
+      }
+    },
+    removeProductFromCart(state, productId) {
+      const token = state.user_token;
+      if (token) {
+        axios.delete(`https://jurapro.bhuser.ru/api-shop/cart/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+            .then(response => {
+              const index = state.cartList.findIndex(product => product.id === productId);
+              if (index !== -1) {
+                state.cartList.splice(index, 1);
+              }
+            })
+            .catch(error => {
+              if (error.response && error.response.data && error.response.data.error && error.response.data.error.code === 403) {
+                console.log('Попытка удалить товар не из своей корзины');
+              } else {
+                console.log(error);
+              }
             });
       } else {
         console.log('Пользователь не авторизован');

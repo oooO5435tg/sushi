@@ -8,7 +8,7 @@
         <button class="quantity_btn">-</button>
         <span class="quantity">Кол-во: {{ item.quantity }}</span>
         <button class="quantity_btn">+</button>
-        <button class="remove_btn">Удалить из корзины</button>
+        <button class="remove_btn" @click="removeProductFromCart(item.id)">Удалить из корзины</button>
       </div>
     </div>
     <button class="order_btn" @click="clearCart">Оформить заказ</button>
@@ -28,6 +28,14 @@ export default {
       return store
     }
   },
+  created() {
+    this.$store.commit('getCart');
+  },
+  methods:{
+    removeProductFromCart(productId) {
+      this.$store.commit('removeProductFromCart', productId);
+    }
+  }
 }
 </script>
 
