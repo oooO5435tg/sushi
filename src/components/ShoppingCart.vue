@@ -3,12 +3,14 @@
   <div v-if="store.state.cartList.length > 0">
     <div id="products">
       <div class="product_item" v-for="item in store.state.cartList" :key="item.id">
-        <h2>{{ item.name }}</h2>
-        <p>{{ item.price }} руб.</p>
-        <button class="quantity_btn">-</button>
-        <span class="quantity">Кол-во: {{ item.quantity }}</span>
-        <button class="quantity_btn">+</button>
-        <button class="remove_btn" @click="removeProductFromCart(item.id)">Удалить из корзины</button>
+        <div>
+          <h2>{{ item.name }}</h2>
+          <p>{{ item.price }} руб.</p>
+          <button class="quantity_btn" @click="decrementQuantity(item)">-</button>
+          <span class="quantity">Кол-во: {{ item.quantity }}</span>
+          <button class="quantity_btn" @click="incrementQuantity(item)">+</button>
+          <button class="remove_btn" @click="removeProductFromCart(item.id)">Удалить из корзины</button>
+        </div>
       </div>
     </div>
     <button class="order_btn" @click="placeOrder" :disabled="store.state.cartList.length === 0">
@@ -39,6 +41,16 @@ export default {
     },
     placeOrder() {
       this.$store.commit('placeOrder');
+    },
+    decrementQuantity(item) {
+      if (item.quantity > 1) {
+        const newQuantity = item.quantity - 1;
+        this.$store.commit('updateCartQuantity', { productId: item.id, newQuantity });
+      }
+    },
+    incrementQuantity(item) {
+      const newQuantity = item.quantity + 1;
+      this.$store.commit('updateCartQuantity', { productId: item.id, newQuantity });
     },
   }
 }

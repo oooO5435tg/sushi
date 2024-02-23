@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <router-link to="/">Каталог</router-link>
+    <router-link to="/" v-show="store.state.user_token !== null">Каталог</router-link>
     <router-link to="/cart" v-show="store.state.user_token !== null">Корзина</router-link>
     <router-link to="/orders" v-show="store.state.user_token !== null">Мои заказы</router-link>
     <router-link to="/" v-show="store.state.user_token !== null" @click="store.commit('logout')">Выход</router-link>

@@ -32,8 +32,8 @@ export default {
         <h2>Заказ #{{ order.id }}</h2>
         <p>Товары:</p>
         <ul>
-          <li v-for="product in store.state.orderList" :key="product.id">
-            {{ product.name }} (цена: {{ product.price }} руб., количество: {{ product.quantity }})
+          <li v-for="product in order.products" :key="product.id">
+            {{ product.name }} (цена: {{ product.price }} руб., количество: {{ product.pivot.quantity }})
           </li>
         </ul>
         <p>Итого: {{ getOrderTotalPrice(order) }} руб.</p>

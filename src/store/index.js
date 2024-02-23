@@ -46,6 +46,7 @@ export default createStore({
       .then(function(response){
         state.user_token = response.data.data.user_token;
         localStorage.token = state.user_token;
+        console.log(response.data.data);
         alert('Регистрация прошла успешно');
         if(localStorage.token !== null && localStorage.token !== undefined){
           window.location.href = "/login";
@@ -63,6 +64,7 @@ export default createStore({
           .then(function(response){
             state.user_token = response.data.data.user_token;
             localStorage.token = state.user_token;
+            console.log(response.data.data);
             alert('Авторизация прошла успешно');
           })
           .catch(error =>{console.log(error)
@@ -72,10 +74,28 @@ export default createStore({
         window.location.href = "/";
       }
     },
-    logout(state){
+    // logout(state){
+    //   state.user_token = null;
+    //   // localStorage.clear();
+    //   // localStorage.removeItem('userOrders');
+    // },
+    async logout(state) {
+      const token = state.user_token;
+      const response = await axios.get(`https://jurapro.bhuser.ru/api-shop/logout`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+          .then(response => {
+            if (response.status === 200 && response.data.data.message === 'logout') {
+              console.log(response.data);
+              // localStorage.removeItem('user_token');
+            }
+          })
+          .catch(error => {console.log(error);
+          });
       state.user_token = null;
-      // localStorage.clear();
-      // localStorage.removeItem('userOrders');
+      localStorage.clear();
     },
     // logout(state) {
     //   state.user_token = null;
@@ -100,10 +120,11 @@ export default createStore({
           }
         })
             .then(response => {
+              console.log({ data: { message: 'Product add to cart' } });
+              response.data.data.quantity = 1;
               state.cartList.push(response.data.data);
             })
-            .catch(error => {
-              console.log(error);
+            .catch(error => {console.log(error);
             });
       } else {
         console.log('Пользователь не авторизован');
@@ -118,10 +139,10 @@ export default createStore({
           }
         })
             .then(response => {
+              console.log({ data: response.data.data });
               state.cartList = response.data.data;
             })
-            .catch(error => {
-              console.log(error);
+            .catch(error => {console.log(error);
             });
       } else {
         console.log('Пользователь не авторизован');
@@ -139,11 +160,12 @@ export default createStore({
               const index = state.cartList.findIndex(product => product.id === productId);
               if (index !== -1) {
                 state.cartList.splice(index, 1);
+                console.log({ data: { message: 'Item removed from cart' } });
               }
             })
             .catch(error => {
               if (error.response && error.response.data && error.response.data.error && error.response.data.error.code === 403) {
-                console.log('Попытка удалить товар не из своей корзины');
+                console.log({ error: { code: error.response.data.error.code, message: error.response.data.error.message } });
               } else {
                 console.log(error);
               }
@@ -152,6 +174,13 @@ export default createStore({
         console.log('Пользователь не авторизован');
       }
     },
+    updateCartQuantity(state, { productId, newQuantity }) {
+      const productToUpdate = state.cartList.find((product) => product.id === productId);
+      if (productToUpdate) {
+        productToUpdate.quantity = newQuantity;
+      }
+    },
+
     async placeOrder(state) {
       const token = state.user_token;
       if (token) {
@@ -168,7 +197,8 @@ export default createStore({
           if (response.status === 201) {
             state.orderList.unshift(response.data.data);
             localStorage.setItem('userOrders', JSON.stringify(state.orderList));
-            state.cartList = []; // Clear the cart after a successful order
+            state.cartList = [];
+            console.log({ data: { order_id: response.data.data.id, message: 'Order is processed' } });
           }
         } catch (error) {
           if (error.response && error.response.status === 422) {
@@ -190,6 +220,7 @@ export default createStore({
       const storedOrders = localStorage.getItem('userOrders');
       if (storedOrders) {
         commit('setOrders', JSON.parse(storedOrders));
+        console.log({ data: { orders: JSON.parse(storedOrders) } });
       }
     },
   },
