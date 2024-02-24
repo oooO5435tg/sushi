@@ -6,14 +6,14 @@
         <div>
           <h2>{{ item.name }}</h2>
           <p>{{ item.price }} руб.</p>
-          <button class="quantity_btn" @click="decrementQuantity(item)">-</button>
+          <button class="quantity_btn">-</button>
           <span class="quantity">Кол-во: {{ item.quantity }}</span>
-          <button class="quantity_btn" @click="incrementQuantity(item)">+</button>
+          <button class="quantity_btn">+</button>
           <button class="remove_btn" @click="removeProductFromCart(item.id)">Удалить из корзины</button>
         </div>
       </div>
     </div>
-    <button class="order_btn" @click="placeOrder" :disabled="store.state.cartList.length === 0">
+    <button class="order_btn" @click="store.commit('createOrder')" :disabled="store.state.cartList.length === 0">
       Оформить заказ
     </button>
   </div>
@@ -30,27 +30,22 @@ export default {
   computed: {
     store() {
       return store
+    },
+    totalPrice() {
+      if (!Array.isArray(this.store.state.cartList)) {
+        return 0;
+      }
+      return this.store.state.cart.reduce((total, product) => {
+        return total + product.price;
+      }, 0);
     }
   },
-  created() {
+  mounted() {
     this.$store.commit('getCart');
   },
   methods:{
     removeProductFromCart(productId) {
       this.$store.commit('removeProductFromCart', productId);
-    },
-    placeOrder() {
-      this.$store.commit('placeOrder');
-    },
-    decrementQuantity(item) {
-      if (item.quantity > 1) {
-        const newQuantity = item.quantity - 1;
-        this.$store.commit('updateCartQuantity', { productId: item.id, newQuantity });
-      }
-    },
-    incrementQuantity(item) {
-      const newQuantity = item.quantity + 1;
-      this.$store.commit('updateCartQuantity', { productId: item.id, newQuantity });
     },
   }
 }

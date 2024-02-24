@@ -7,8 +7,8 @@ export default {
       return store
     }
   },
-  created() {
-    this.$store.dispatch('loadOrders');
+  mounted() {
+    this.$store.commit('getOrders');
   },
   methods: {
     viewOrderDetails(orderId) {
@@ -20,23 +20,6 @@ export default {
       }
       return order.products.reduce((total, product) => total + product.price * product.quantity, 0);
     },
-    async getProductName(productId) {
-      const token = store.state.user_token;
-      if (token) {
-        try {
-          const response = await axios.get(`https://jurapro.bhuser.ru/api-shop/products/${productId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          return response.data.data.name;
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        console.log('User is not authenticated');
-      }
-    },
   },
 }
 </script>
@@ -45,16 +28,13 @@ export default {
   <h1>Заказы пользователя</h1>
   <div v-if="store.state.orderList.length > 0">
     <div id="orders">
-      <div class="order_item" v-for="order in store.state.orderList" :key="order.id">
+      <div class="order" v-for="order in store.state.orderList" :key="order.id">
         <h2>Заказ #{{ order.id }}</h2>
         <p>Товары:</p>
-        <ul>
-          <li v-for="productId in order.products" :key="productId">
-            {{ getProductName(productId) }}
-          </li>
-        </ul>
-        <p>Итого: {{ getOrderTotalPrice(order) }} руб.</p>
-        <button class="view_btn" @click="viewOrderDetails(order.id)">Подробнее</button>
+        <p>Price: {{order.order_price}} руб.</p>
+        <p v-for="item in order.products">
+          <p class="item">товар - {{ item }}</p>
+        </p>
       </div>
     </div>
   </div>
