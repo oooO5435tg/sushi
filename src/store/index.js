@@ -30,7 +30,6 @@ export default createStore({
       .then(function(response){
         state.user_token = response.data.data.user_token;
         localStorage.token = state.user_token;
-        console.log(response.data.data);
         alert('Регистрация прошла успешно');
         if(localStorage.token !== null && localStorage.token !== undefined){
           window.location.href = "/login";
@@ -48,8 +47,6 @@ export default createStore({
           .then(function(response){
             state.user_token = response.data.data.user_token;
             localStorage.token = state.user_token;
-            console.log(response.data.data);
-            alert('Авторизация прошла успешно');
           })
           .catch(error =>{console.log(error)
             alert('Авторизация провалена. Попробуйте еще раз');
@@ -67,8 +64,6 @@ export default createStore({
       })
           .then(response => {
             if (response.status === 200 && response.data.data.message === 'logout') {
-              console.log(response.data);
-              // localStorage.removeItem('user_token');
             }
           })
           .catch(error => {console.log(error);
@@ -84,14 +79,11 @@ export default createStore({
           }
         })
             .then(response => {
-              console.log({ data: { message: 'Product add to cart' } });
               response.data.data.quantity = 1;
               state.cartList.push(response.data.data);
             })
             .catch(error => {console.log(error);
             });
-      } else {
-        console.log('Пользователь не авторизован');
       }
     },
     getCart(state) {
@@ -106,15 +98,10 @@ export default createStore({
               if(state.cartList.length === 0){
                 console.log("error", { code: "402", message: "Cart is empty" });
               }
-              else{
-                console.log({ data: response.data.data });
-              }
               state.cartList = response.data.data;
             })
             .catch(error => {console.log(error);
             });
-      } else {
-        console.log('Пользователь не авторизован');
       }
     },
     removeProductFromCart(state, productId) {
@@ -129,18 +116,13 @@ export default createStore({
               const index = state.cartList.findIndex(product => product.id === productId);
               if (index !== -1) {
                 state.cartList.splice(index, 1);
-                console.log({ data: { message: 'Item removed from cart' } });
               }
             })
             .catch(error => {
               if (error.response && error.response.data && error.response.data.error && error.response.data.error.code === 403) {
-                console.log({ error: { code: error.response.data.error.code, message: error.response.data.error.message } });
-              } else {
-                console.log(error);
+                
               }
             });
-      } else {
-        console.log('Пользователь не авторизован');
       }
     },
 
@@ -155,21 +137,14 @@ export default createStore({
         })
           .then(response => {
             if (response.status === 201) {
-              console.log('Order log',response.data)
-              console.log('Orders', state.orderList)
               state.cartList.splice(0, state.cartList.length);
-              // window.location.href='/order'
             }
           })
           .catch(error => {
             if (error.response && error.response.status === 422) {
-              console.log('Cart is empty');
-            } else {
-              console.log(error);
+              
             }
           });
-      } else {
-        console.log('User is not authenticated');
       }
     },
     async getOrders(state){
@@ -183,7 +158,6 @@ export default createStore({
           .then(response => state.orderList = response.data)
           .catch(error =>{console.log(error)})
         state.orderList = data;
-        console.log('Orders checker',state.orderList)
       }
     },
   },

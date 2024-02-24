@@ -11,9 +11,6 @@ export default {
     this.$store.commit('getOrders');
   },
   methods: {
-    viewOrderDetails(orderId) {
-      console.log(`Viewing order details for order ID ${orderId}`);
-    },
     getOrderTotalPrice(order) {
       if (!order || !order.products) {
         return 0;
@@ -30,11 +27,15 @@ export default {
     <div id="orders">
       <div class="order" v-for="order in store.state.orderList" :key="order.id">
         <h2>Заказ #{{ order.id }}</h2>
-        <p>Товары:</p>
-        <p>Price: {{order.order_price}} руб.</p>
-        <p v-for="item in order.products">
-          <p class="item">товар - {{ item }}</p>
-        </p>
+        <p>Список товаров в заказе:</p>
+          <p v-for="item in order.products" :key="item">
+          <h4>Товар:</h4>
+            <div class="prod_item">
+              <p class="item">id товара: {{ item }}</p>
+              <p class="item">название товара: {{ this.store.state.products.find(p => p.id === item).name }}</p>
+              <p>стоимость: {{ order.order_price }} руб.</p>
+            </div>
+          </p>
       </div>
     </div>
   </div>
@@ -46,31 +47,37 @@ export default {
 
 <style scoped>
 #orders{
-  margin-left: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.order_item {
-  width: 400px;
-  background-color: #f2f2f2;
+.order {
+  width: 20%;
+  background-color: #e1e1e1;
   border-radius: 5px;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
-.order_item:hover {
+.order:hover {
   transform: translateY(-5px);
 }
 
-.order_item h2 {
+.prod_item{
+  margin-bottom: 30px;
+}
+
+.order h2 {
   margin: 0 0 10px;
 }
 
-.order_item p {
-  margin: 5px 0;
+.order p {
+  margin: 10px;
 }
 
 .view_btn {

@@ -13,9 +13,8 @@
         </div>
       </div>
     </div>
-    <button class="order_btn" @click="store.commit('createOrder')" :disabled="store.state.cartList.length === 0">
-      Оформить заказ
-    </button>
+    <h4 class="totalPrice">Итого: {{ totalPrice }} руб.</h4>
+    <button class="order_btn" @click="store.commit('createOrder')" :disabled="store.state.cartList.length === 0">Оформить заказ</button>
   </div>
   <div v-else>
     <h3>Ваша корзина пуста</h3>
@@ -35,7 +34,7 @@ export default {
       if (!Array.isArray(this.store.state.cartList)) {
         return 0;
       }
-      return this.store.state.cart.reduce((total, product) => {
+      return this.store.state.cartList.reduce((total, product) => {
         return total + product.price;
       }, 0);
     }
@@ -53,15 +52,14 @@ export default {
 
 <style>
 #products {
-  display: grid;
-  grid-template-columns: repeat(5, 200px);
-  gap: 90px;
-  margin-left: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .product_item {
   width: 220px;
-  background-color: #f2f2f2;
+  background-color: #e1e1e1;
   border-radius: 5px;
   padding: 20px;
   text-align: center;
@@ -123,5 +121,9 @@ export default {
 
 .order_btn:hover {
   background-color: #369620;
+}
+
+.totalPrice{
+  color: #006400;
 }
 </style>

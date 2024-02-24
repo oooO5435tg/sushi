@@ -42,11 +42,11 @@ export default {
 }
 .products{
   display: grid;
-  grid-template-columns: repeat(5, 200px);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 0.8fr));
   gap: 90px;
 }
 .product_item{
-  width: 220px;
+  width: 100%;
   background-color: #e1e1e1;
   border-radius: 5px;
   padding: 20px;
@@ -75,5 +75,17 @@ export default {
 }
 .product_item button:hover{
   background-color: #3e8e41;
+}
+
+@media screen and (max-width: 1920px) {
+  .product_item{
+    transform: scale(0.9);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .products{
+    grid-template-columns: 1fr;
+  }
 }
 </style>

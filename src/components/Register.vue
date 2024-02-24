@@ -14,7 +14,7 @@ export default {
  <div class="register-form">
    <form @submit.prevent="store.commit('registration')">
      <div class="form-group">
-       <label for="name">Name</label>
+       <label for="name">Fio</label>
        <input id="name" type="text" v-model="store.state.fio" required class="form-control">
      </div>
 
