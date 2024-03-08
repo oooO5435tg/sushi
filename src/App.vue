@@ -1,17 +1,26 @@
 <template>
-  <nav>
-    <router-link to="/" v-show="store.state.user_token !== null">Каталог</router-link>
-    <router-link to="/cart" v-show="store.state.user_token !== null">Корзина</router-link>
-    <router-link to="/orders" v-show="store.state.user_token !== null">Мои заказы</router-link>
-    <router-link to="/" v-show="store.state.user_token !== null" @click="store.commit('logout')">Выход</router-link>
-    <router-link to="/registration" v-show="store.state.user_token === null">Регистрация</router-link>
-    <router-link to="/login" v-show="store.state.user_token === null">Вход</router-link>
-  </nav>
-
-  <router-view :cart="cart" @update:cart="cart = $event" />
-  <router-view v-slot="{ ShoppingCart }">
-    <component :is="ShoppingCart" v-if="ShoppingCart" />
-  </router-view>
+  <div id="app">
+    <div id="nav" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
+      <div class="icon-block">
+        <img src="../public/favicon.png" style="width: 40px; height: 40px" />
+        <h2 style="color: #b9533c; font-family: cursive; font-weight: 600; font-size: 18px; margin-left: 5%">ARIGATO</h2>
+      </div>
+      <div class="nav-left-block">
+        <router-link to="/">КАТАЛОГ</router-link>
+        <router-link to="/cart">КОРЗИНА</router-link>
+      </div>
+      <div class="nav-right-block">
+        <router-link to="/login">ВХОД</router-link>
+        <router-link to="/registration">РЕГИСТРАЦИЯ</router-link>
+        <router-link to="/" style="display: none">ВЫХОД</router-link>
+      </div>
+    </div>
+    <div id="nav-spacer" style="height: 60px;"></div>
+    <router-view />
+    <div id="footer">
+      <p>&copy; 2024 Arigato. All rights reserved.</p>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -20,33 +29,46 @@ body{
   padding: 0;
   box-sizing: border-box;
 }
-#app{
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-nav{
+#nav{
+  height: 60px;
+  padding: 0 0 0 10%;
+  background: rgba(18, 18, 18, 1);
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 80px;
-  background-color: #42b983;
 }
-nav a{
-  color: #fff;
+#nav a{
+  font-family: system-ui;
+  font-weight: 600;
+  font-size: 16px;
+  color: white;
+  margin-right: 30%;
   text-decoration: none;
-  margin: 0 10px;
-  padding: 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
 }
-nav a:hover{
-  background-color: #37a073;
+#nav a:hover{
+  text-decoration: underline;
 }
-nav a.router-link-exact-active{
-  background-color: #37a073;
+.nav-left-block{
+  margin-right: 30%;
+}
+.icon-block{
+  display: flex;
+  align-items: center;
+  margin-right: 30%;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: rgba(255, 234, 182, 1);
+}
+
+#footer {
+  background: rgba(18, 18, 18, 1);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: auto;
 }
 </style>
 
@@ -56,11 +78,6 @@ export default {
   computed:{
     store(){
       return store
-    },
-  },
-  methods: {
-    logout() {
-      store.commit("logout");
     },
   },
 }

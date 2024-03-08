@@ -10,64 +10,44 @@ export default {
 </script>
 
 <template>
-<h1>Регистрация нового пользователя</h1>
- <div class="register-form">
-   <form @submit.prevent="store.commit('registration')">
-     <div class="form-group">
-       <label for="name">Fio</label>
-       <input id="name" type="text" v-model="store.state.fio" required class="form-control">
-     </div>
-
-     <div class="form-group">
-       <label for="email">E-mail Address</label>
-       <input id="email" type="email" v-model="store.state.email" required class="form-control">
-     </div>
-
-     <div class="form-group">
-       <label for="password">Password</label>
-       <input id="password" type="password" v-model="store.state.password" required class="form-control">
-     </div>
-     <div>
-       <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-     </div>
-   </form>
- </div>
-  <router-link to="/">Вернуться на главную</router-link>
+  <div style="display: flex; flex-direction: column; align-items: center; padding: 2%">
+    <div style="width: 20%; height: 5%; background: rgba(97, 10, 5, 1); border: none; border-radius: 15px; display: flex; justify-content: center; margin-bottom: 2%">
+      <h1 style="color: rgba(255, 234, 182, 1);">Регистрация</h1>
+    </div>
+    <form class="register-form" @submit.prevent="store.commit('registration')" style="width: 30%; padding: 2%; display: flex; flex-direction: column; align-items: center; background: rgba(97, 10, 5, 1);">
+      <input required v-model="store.state.fio" type="text" placeholder="ФИО" class="form-control">
+      <input required v-model="store.state.email" type="email" placeholder="Почта" class="form-control">
+      <input required v-model="store.state.password" type="password" placeholder="Пароль" class="form-control">
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+  </div>
 </template>
 
 <style scoped>
-.register-form {
- max-width: 400px;
- margin: 3% auto;
- padding: 20px;
- border: 1px solid #ccc;
- border-radius: 5px;
- box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
- background-color: #e1e1e1;
+.register-form input{
+  width: 100%;
+  height: 30px;
+  font-size: 16px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 5%;
 }
-
-.form-group {
- margin-bottom: 15px;
+.register-form button{
+  width: 50%;
+  height: 30px;
+  border: 3px solid rgba(255, 234, 182, 1);
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: rgba(255, 234, 182, 1);
+  padding: 4%;
+  margin-top: 5%;
 }
-
-.form-control {
- width: 100%;
- padding: 5px;
- border: 1px solid #ccc;
- border-radius: 5px;
-}
-
-.btn {
- width: 100%;
- padding: 5px;
- background-color: #4CAF50;
- color: white;
- border: none;
- border-radius: 5px;
- cursor: pointer;
-}
-
-.btn:hover {
- background-color: #3e8e41;
+.register-form button:hover{
+  background: rgba(255, 234, 182, 1);
+  color: rgba(97, 10, 5, 1);
 }
 </style>

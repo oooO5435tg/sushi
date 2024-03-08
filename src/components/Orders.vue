@@ -7,16 +7,8 @@ export default {
       return store
     }
   },
-  mounted() {
-    this.$store.commit('getOrders');
-  },
   methods: {
-    getOrderTotalPrice(order) {
-      if (!order || !order.products) {
-        return 0;
-      }
-      return order.products.reduce((total, product) => total + product.price * product.quantity, 0);
-    },
+
   },
 }
 </script>
@@ -46,49 +38,5 @@ export default {
 </template>
 
 <style scoped>
-#orders{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.order {
-  width: 20%;
-  background-color: #e1e1e1;
-  border-radius: 5px;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-  margin-bottom: 30px;
-}
-
-.order:hover {
-  transform: translateY(-5px);
-}
-
-.prod_item{
-  margin-bottom: 30px;
-}
-
-.order h2 {
-  margin: 0 0 10px;
-}
-
-.order p {
-  margin: 10px;
-}
-
-.view_btn {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  margin: 0 10px;
-}
-
-.view_btn:hover {
-  color: #f00;
-}
 </style>
